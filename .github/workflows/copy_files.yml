@@ -26,18 +26,22 @@ jobs:
       - name: Identify new MD files
         id: new-md-files
         run: |
+          new_md_files=()
           cd source_repo/fin
           for file in *.md; do
             if [ ! -f "../../target_repo/destination_folder/$file" ]; then
-              echo "$file" >> ../../new_md_files.txt
+              new_md_files+=("$file")
             fi
           done
+          echo "${new_md_files[@]}" > ../../new_md_files.txt
 
       - name: Copy new MD files to target repository
         run: |
-          while IFS= read -r file; do
-            cp "source_repo/fin/$file" "target_repo/destination_folder/$file"
-          done < source_repo/new_md_files.txt
+          new_md_files=$(<source_repo/new_md_files.txt)
+          cd source_repo/fin
+          for file in $new_md_files; do
+            cp "$file" "../../target_repo/destination_folder/$file"
+          done
 
       - name: Commit and push new MD files to target repository
         if: steps.new-md-files.outputs.stdout != ''
