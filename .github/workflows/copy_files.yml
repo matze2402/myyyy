@@ -28,7 +28,7 @@ jobs:
       - name: Identify new MD files
         id: new-md-files
         run: |
-          new_md_files=""
+          new_md_files=
           cd source_repo/fin
           for file in *.md; do
             # Check if the file has been pushed to the target repository before
