@@ -52,4 +52,5 @@ jobs:
           
           git add destination_folder
           git commit -m "Add new MD files from source repository"
-          git push url.https://${{ secrets.token}}@github.com/.insteadOf https://github.com/ HEAD:main
+          # Replace new with your Personal Access Token secret
+          git push https://github.com/matze2402/matze2402.git HEAD:main
