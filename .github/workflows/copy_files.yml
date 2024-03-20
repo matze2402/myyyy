@@ -41,7 +41,7 @@ jobs:
           new_md_files="${{ steps.new-md-files.outputs.new_md_files }}"
           cd source_repo/fin
           for file in $new_md_files; do
-            cp "$file" "../../target_repo/destination_folder/$file"
+            cp "$file" "../../matze2402/destination_folder/$file"
           done
 
       - name: Commit and push new MD files to target repository
