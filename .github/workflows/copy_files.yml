@@ -48,7 +48,7 @@ jobs:
         run: |
           cd target_repo
           git config --local user.email "action@github.com"
-          git config --local user.name "yourusername"
+          git config --local user.name "Matze2402"
           git config --global url.https://${{ secrets.admin}}@github.com/.insteadOf https://github.com/
           git add destination_folder
           git commit -m "Add new MD files from source repository"
