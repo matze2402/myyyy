@@ -1,11 +1,9 @@
-name: Push New MD Files to Another Repository
+name: Push New or Renamed MD Files to Another Repository
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'fin/*.md'
 
 permissions:
   contents: write
@@ -24,27 +22,36 @@ jobs:
       - name: Clone target repository
         run: git clone https://github.com/matze2402/matze2402.git matze2402
 
-      - name: Identify new MD files
-        id: new-md-files
+      - name: Identify new or renamed MD files
+        id: new-or-renamed-md-files
         run: |
           cd source_repo/fin
-          new_md_files=$(git status --porcelain | grep '^A' | grep '\.md$' | cut -c4-)
-          echo "::set-output name=new_md_files::$new_md_files"
+          # Get the list of all MD files in the source repository
+          all_md_files=$(ls *.md)
+          # Check the status of files after changes
+          git add .
+          changed_md_files=$(git status --porcelain | grep '^R\|^A' | grep '\.md$' | cut -c4-)
+          echo "::set-output name=changed_md_files::$changed_md_files"
+          echo "::set-output name=all_md_files::$all_md_files"
 
-      - name: Copy new MD files to target repository
+      - name: Copy new or renamed MD files to target repository
         run: |
-          new_md_files="${{ steps.new-md-files.outputs.new_md_files }}"
-          for file in $new_md_files; do
-            cp "source_repo/fin/$file" "matze2402/destination_folder/$file"
+          changed_md_files="${{ steps.new-or-renamed-md-files.outputs.changed_md_files }}"
+          all_md_files="${{ steps.new-or-renamed-md-files.outputs.all_md_files }}"
+          # Check if the file is new or renamed
+          for file in $changed_md_files; do
+            if [[ $all_md_files =~ $file ]]; then
+              cp "$file" "../../matze2402/destination_folder/$file"
+            fi
           done
 
-      - name: Commit and push new MD files to target repository
-        if: steps.new-md-files.outputs.new_md_files != ''
+      - name: Commit and push new or renamed MD files to target repository
+        if: steps.new-or-renamed-md-files.outputs.changed_md_files != ''
         run: |
           cd matze2402
           git config --local user.email "action@github.com"
           git config --local user.name "Matze2402"
           git config --global url.https://${{ secrets.token}}@github.com/.insteadOf https://github.com/
-          git add .
-          git commit -m "Add new MD files from source repository"
+          git add destination_folder
+          git commit -m "Add new or renamed MD files from source repository"
           git push
