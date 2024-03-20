@@ -21,6 +21,7 @@ jobs:
 
       - name: Debug Information
         run: |
+          cd source_repo
           pwd
           git rev-parse --abbrev-ref HEAD
           cd source_repo/fin
