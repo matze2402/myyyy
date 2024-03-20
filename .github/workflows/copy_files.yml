@@ -13,21 +13,22 @@ jobs:
       - name: Checkout source repository
         uses: actions/checkout@v2
         with:
-          path: myyyy
+          repository: matze2402/myyyy
+          path: source_repo
 
       - name: Checkout target repository
         uses: actions/checkout@v2
         with:
           repository: matze2402/matze2402
-          path: matze2402
+          path: target_repo
           ref: main  # Specify the branch of the target repository
 
       - name: Identify new MD files
         id: new-md-files
         run: |
-          cd myyyy/fin
+          cd source_repo/fin
           for file in *.md; do
-            if [ ! -f "../../matze2402/destination_folder/$file" ]; then
+            if [ ! -f "../../target_repo/destination_folder/$file" ]; then
               echo "$file" >> ../../new_md_files.txt
             fi
           done
@@ -35,15 +36,15 @@ jobs:
       - name: Copy new MD files to target repository
         run: |
           while IFS= read -r file; do
-            cp "myyyy/fin/$file" "matze2402/destination_folder/$file"
-          done < myyyy/new_md_files.txt
+            cp "source_repo/fin/$file" "target_repo/destination_folder/$file"
+          done < source_repo/new_md_files.txt
 
       - name: Commit and push new MD files to target repository
         if: steps.new-md-files.outputs.stdout != ''
         run: |
-          cd matze2402
+          cd target_repo
           git config --local user.email "action@github.com"
-          git config --local user.name "matze2402"
+          git config --local user.name "yourusername"
           git config --global url.https://${{ secrets.token}}@github.com/.insteadOf https://github.com/
           git add destination_folder
           git commit -m "Add new MD files from source repository"
