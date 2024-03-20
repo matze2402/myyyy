@@ -15,9 +15,7 @@ jobs:
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v2
-        with:
-          repository: matze2402/myyyy
-          path: myyyy
+        
 
       - name: Clone target repository
         run: git clone https://github.com/matze2402/matze2402.git matze2402
@@ -25,7 +23,7 @@ jobs:
       - name: Identify new or renamed MD files
         id: new-or-renamed-md-files
         run: |
-          cd source_repo/fin
+          cd myyyy/fin
           # Check the status of files after changes
           all_md_files=$(ls *.md)
           git add .
@@ -40,7 +38,7 @@ jobs:
           # Check if the file is new or renamed
           for file in $changed_md_files; do
             if [[ $all_md_files =~ $file ]]; then
-              cp "source_repo/fin/$file" "matze2402/destination_folder/$file"
+              cp "myyyy/fin/$file" "matze2402/destination_folder/$file"
             fi
           done
 
