@@ -49,7 +49,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.new }}
         run: |
-          cd target_repo
+          cd matze2402
           git config --local user.email "action@github.com"
           git config --local user.name "Matze2402"
           git config --global url.https://${{ secrets.token}}@github.com/.insteadOf https://github.com/
