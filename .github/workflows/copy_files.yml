@@ -20,7 +20,10 @@ jobs:
           path: source_repo
 
       - name: Clone target repository
-        run: git clone https://github.com/matze2402/matze2402.git matze2402
+        run: |
+          git clone https://github.com/matze2402/matze2402.git matze2402
+          mkdir -p matze2402
+          touch matze2402/pushed_files.txt
 
       - name: Identify new MD files
         id: new-md-files
