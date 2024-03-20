@@ -43,7 +43,7 @@ jobs:
           new_md_files="${{ steps.new-md-files.outputs.new_md_files }}"
           cd source_repo/fin
           for file in $new_md_files; do
-            cp "$file" "destination_folder/$file"
+            cp "$file" "../destination_folder/$file"
           done
 
       - name: Record pushed files
