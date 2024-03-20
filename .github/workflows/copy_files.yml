@@ -22,7 +22,7 @@ jobs:
       - name: Clone target repository
         run: |
           git clone https://github.com/matze2402/matze2402.git matze2402
-          mkdir -p matze2402/destination_folder  # Create destination_folder if it doesn't exist
+          mkdir -p ../matze2402/destination_folder  # Create destination_folder if it doesn't exist
           touch matze2402/destination_folder/pushed_files.txt  # Create pushed_files.txt if it doesn't exist
 
       - name: Identify new MD files
@@ -32,7 +32,7 @@ jobs:
           cd source_repo/fin
           for file in *.md; do
             # Check if the file has been pushed to the target repository before
-            if ! grep -q "^$file$" "destination_folder/pushed_files.txt"; then
+            if ! grep -q "^$file$" "../destination_folder/pushed_files.txt"; then
               new_md_files="$new_md_files $file"
             fi
           done
