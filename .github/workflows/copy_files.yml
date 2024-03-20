@@ -36,7 +36,7 @@ jobs:
         run: |
           while IFS= read -r file; do
             cp "myyyy/fin/$file" "matze2402/destination_folder/$file"
-          done < fin/new_md_files.txt
+          done < myyyy/new_md_files.txt
 
       - name: Commit and push new MD files to target repository
         if: steps.new-md-files.outputs.stdout != ''
