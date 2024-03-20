@@ -1,4 +1,4 @@
-name: Copy Files
+name: Push New Files to Another Repository
 
 on:
   push:
@@ -6,15 +6,43 @@ on:
       - main
 
 jobs:
-  copy_files:
+  push-new-files:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      
+      - name: Clone target repository
+        run: git clone https://github.com/matze2402/matze2402 matze2402
+        # Replace 'yourusername' with your GitHub username and 'destination_repo' with the name of your target repository
 
-      - name: Create fin directory
-        run: mkdir -p fin
+      - name: List files in folder
+        run: ls fin
 
-      - name: Copy files from yes to fin
-        run: mv yes/* fin/
+      - name: Identify new and changed files
+        id: new-changed-files
+        run: |
+          cd fin
+          find . -type f -name "*.md" -exec sh -c 'md5sum "$0" | cut -d " " -f 1' {} \; > ../source_md5sum.txt
+          cd ../matze2402
+          find . -type f -name "*.md" -exec sh -c 'md5sum "$0" | cut -d " " -f 1' {} \; > target_md5sum.txt
+          comm -23 <(sort ../source_md5sum.txt) <(sort target_md5sum.txt) > new_md5sum.txt
+
+      - name: Copy new and changed files to target repository
+        run: |
+          while IFS= read -r md5sum; do
+            file=$(grep "$md5sum" ../source_md5sum.txt | cut -d ":" -f 1)
+            cp "../folder_name/$file" "$file"
+          done < new_md5sum.txt
+
+      - name: Commit and push new and changed files to target repository
+        if: steps.new-changed-files.outputs.stdout != ''
+        run: |
+          cd matze2402
+          git config --local user.email "action@github.com"
+          git config --local user.name "yourusername"
+          git config --global url.https://${{ secrets.token}}@github.com/.insteadOf https://github.com/
+          git add .
+          git commit -m "Add new and changed files from source repository"
+          git push
