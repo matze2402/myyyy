@@ -32,7 +32,8 @@ jobs:
           cd source_repo/fin
           for file in *.md; do
             # Check if the file has been pushed to the target repository before
-           if ! grep -q "^${file%\"*}\"" "$(curl -sSL "https://raw.githubusercontent.com/matze2402/matze2402/main/destination_folder/pushed_files.txt")"; then
+           sanitized_file=$(echo "$file" | sed 's/^"//' | sed 's/"$//')
+if ! grep -q "^$sanitized_file$" "$(curl -sSL "https://raw.githubusercontent.com/matze2402/matze2402/main/destination_folder/pushed_files.txt")"; then
 
               new_md_files="$new_md_files $file"
             fi
