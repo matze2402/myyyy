@@ -28,9 +28,8 @@ jobs:
           new_md_files=""
           cd source_repo/fin
           for file in *.md; do
-            if [ ! -f "../../matze2402/destination_folder/$file" ]; then
-              new_md_files="$new_md_files $file"
-            elif ! git diff --quiet "../../matze2402/destination_folder/$file" "$file"; then
+            # Check if the file has been pushed to the target repository before
+            if ! grep -q "^$file$" "../../matze2402/pushed_files.txt"; then
               new_md_files="$new_md_files $file"
             fi
           done
@@ -42,6 +41,14 @@ jobs:
           cd source_repo/fin
           for file in $new_md_files; do
             cp "$file" "../../matze2402/destination_folder/$file"
+          done
+
+      - name: Record pushed files
+        if: steps.new-md-files.outputs.new_md_files != ''
+        run: |
+          new_md_files="${{ steps.new-md-files.outputs.new_md_files }}"
+          for file in $new_md_files; do
+            echo "$file" >> "../../matze2402/pushed_files.txt"
           done
 
       - name: Commit and push new MD files to target repository
