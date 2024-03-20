@@ -32,7 +32,7 @@ jobs:
           cd source_repo/fin
           for file in *.md; do
             # Check if the file has been pushed to the target repository before
-            if ! grep -q "^$file$" "../../matze2402/pushed_files.txt"; then
+            if ! grep -q "^$file$" "../../pushed_files.txt"; then
               new_md_files="$new_md_files $file"
             fi
           done
