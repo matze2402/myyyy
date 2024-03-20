@@ -31,20 +31,15 @@ jobs:
           # Get the list of all MD files in the source repository
           all_md_files=$(ls *.md)
           # Check the status of files after changes
-          git add .
-          changed_md_files=$(git status --porcelain | grep '^R\|^A' | grep '\.md$' | cut -c4-)
+          changed_md_files=$(git status --porcelain | grep '^A\|^R' | grep '\.md$' | cut -c4-)
           echo "::set-output name=changed_md_files::$changed_md_files"
           echo "::set-output name=all_md_files::$all_md_files"
 
       - name: Copy new or renamed MD files to target repository
         run: |
           changed_md_files="${{ steps.new-or-renamed-md-files.outputs.changed_md_files }}"
-          all_md_files="${{ steps.new-or-renamed-md-files.outputs.all_md_files }}"
-          # Check if the file is new or renamed
           for file in $changed_md_files; do
-            if [[ $all_md_files =~ $file ]]; then
-              cp "$file" "../../matze2402/destination_folder/$file"
-            fi
+            cp "source_repo/fin/$file" "matze2402/destination_folder/$file"
           done
 
       - name: Commit and push new or renamed MD files to target repository
@@ -54,6 +49,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Matze2402"
           git config --global url.https://${{ secrets.token}}@github.com/.insteadOf https://github.com/
-          git add destination_folder
+          git add .
           git commit -m "Add new or renamed MD files from source repository"
           git push
