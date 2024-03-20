@@ -19,6 +19,14 @@ jobs:
           repository: matze2402/myyyy
           path: source_repo
 
+      - name: Debug Information
+        run: |
+          pwd
+          git rev-parse --abbrev-ref HEAD
+          cd source_repo/fin
+          git status --porcelain
+          ls -l *.md
+
       - name: Clone target repository
         run: git clone https://github.com/matze2402/matze2402.git matze2402
 
@@ -26,9 +34,8 @@ jobs:
         id: new-or-renamed-md-files
         run: |
           cd source_repo/fin
-          # Get the list of all MD files in the source repository
-          all_md_files=$(ls *.md)
           # Check the status of files after changes
+          all_md_files=$(ls *.md)
           git add .
           changed_md_files=$(git status --porcelain | grep '^R\|^A' | grep '\.md$' | cut -c4-)
           echo "::set-output name=changed_md_files::$changed_md_files"
@@ -41,7 +48,7 @@ jobs:
           # Check if the file is new or renamed
           for file in $changed_md_files; do
             if [[ $all_md_files =~ $file ]]; then
-              cp "$file" "../../matze2402/destination_folder/$file"
+              cp "source_repo/fin/$file" "matze2402/destination_folder/$file"
             fi
           done
 
