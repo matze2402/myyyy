@@ -17,4 +17,4 @@ jobs:
         run: mkdir -p fin
 
       - name: Copy files from yes to fin
-        run: cp -r yes/* fin/
+        run: mv yes/* fin/
