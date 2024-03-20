@@ -30,7 +30,7 @@ jobs:
           new_md_files=""
           cd source_repo/fin
           for file in *.md; do
-            if [ ! -f "../../target_repo/destination_folder/$file" ]; then
+            if [ ! -f "../../matze2402/destination_folder/$file" ]; then
               new_md_files="$new_md_files $file"
             fi
           done
