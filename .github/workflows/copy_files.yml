@@ -23,7 +23,7 @@ jobs:
       - name: Identify new or renamed MD files
         id: new-or-renamed-md-files
         run: |
-          cd myyyy/fin
+          cd fin
           # Check the status of files after changes
           all_md_files=$(ls *.md)
           git add .
