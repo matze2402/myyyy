@@ -51,7 +51,7 @@ jobs:
         run: |
           new_md_files="${{ steps.new-md-files.outputs.new_md_files }}"
           for file in $new_md_files; do
-            echo "$file" >> "../destination_folder/pushed_files.txt"
+            echo "$file" >> "../../matze2402/destination_folder/pushed_files.txt"
           done
 
       - name: Commit and push new MD files to target repository
