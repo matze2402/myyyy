@@ -52,4 +52,4 @@ jobs:
           
           git add destination_folder
           git commit -m "Add new MD files from source repository"
-          git push https://github.com/matze2402/matze2402.git/main HEAD:main
+          git push url.https://${{ secrets.new}}@github.com/.insteadOf https://github.com/ HEAD:main
