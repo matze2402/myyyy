@@ -1,0 +1,20 @@
+name: Copy Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  copy_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create fin directory
+        run: mkdir -p fin
+
+      - name: Copy files from yes to fin
+        run: cp -r yes/* fin/
