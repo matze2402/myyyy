@@ -38,7 +38,7 @@ jobs:
           # Check if the file is new or renamed
           for file in $all_md_files; do
             if [[ ! -f "matze2402/destination_folder/$file" ]]; then
-            cp "myyyy/fin/$file" "matze2402/destination_folder/$file"
+            cp "./fin/$file" "matze2402/destination_folder/$file"
               fi
           done
 
