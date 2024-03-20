@@ -17,16 +17,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: matze2402/myyyy
-          path: source_repo
-
-      - name: Debug Information
-        run: |
-          cd source_repo
-          pwd
-          git rev-parse --abbrev-ref HEAD
-          cd source_repo/fin
-          git status --porcelain
-          ls -l *.md
+          path: myyyy
 
       - name: Clone target repository
         run: git clone https://github.com/matze2402/matze2402.git matze2402
